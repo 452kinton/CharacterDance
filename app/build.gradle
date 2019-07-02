@@ -7,7 +7,7 @@ android {
         resolutionStrategy.force 'com.google.code.findbugs:jsr305:3.0.2'
     }
     defaultConfig {
-        applicationId "com.liu.kinton.ffmpegdemo"
+        applicationId "com.liu.kinton.CharacterDance"
         minSdkVersion 24
         targetSdkVersion 28
         versionCode 1

@@ -15,7 +15,11 @@ import android.widget.Toast;
 
 import com.liu.kinton.CharacterDance.R;
 import com.liu.kinton.CharacterDance.utils.AyscnConvertUtils;
+import com.liu.kinton.CharacterDance.utils.BitmapUtils;
+import com.liu.kinton.CharacterDance.utils.DialogUtils;
 import com.liu.kinton.CharacterDance.utils.FileUtils;
+import com.liu.kinton.CharacterDance.utils.VideoUtils;
+import com.liu.kinton.CharacterDance.widget.AlertDialog;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import org.jcodec.api.FrameGrab;
@@ -31,9 +35,12 @@ import butterknife.OnClick;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
-public class MainActivity extends AppCompatActivity implements AyscnConvertUtils.Progresslistener {
+public class MainActivity extends AppCompatActivity implements AyscnConvertUtils.Progresslistener, DialogUtils.OnDialogBtnClickListener {
     private static final int REQUEST_CODE_GALLERY = 0x10;// 图库选取图片标识请求码
     private static final int REQUEST_CODE_VIDEO = 0x20;// 图库选取图片标识请求码
+    private AlertDialog alertDialog = null;
+    private Uri uri = null;
+    private int status = 0;
 
     @BindView(R.id.iv_main_convert_pic)
     ImageView ivConvertPic;
@@ -94,29 +101,60 @@ public class MainActivity extends AppCompatActivity implements AyscnConvertUtils
             switch (requestCode) {
                 case REQUEST_CODE_GALLERY:
                     Log.i("main activity", "uri:" + data.getData().toString());
-                    Uri uri = data.getData();
-                    //Log.i("main activity", "path:" + FileUtils.getPathByUri(this, data.getData()));
-                    AyscnConvertUtils.getInstance().startConvertPic(this, uri, this);
+                    uri = data.getData();
+                    status = REQUEST_CODE_GALLERY;
+                    showDialog("确定要将该图片\n\r("+uri.toString()+")\n\r进行转换？");
                     break;
                 case REQUEST_CODE_VIDEO:
-                    String videoPath = FileUtils.getPathByUri(this, data.getData());
-                    Log.i("main activity", "path:" + videoPath);
-                    AyscnConvertUtils.getInstance().startConvertVideo(this, videoPath, this);
+                    uri = data.getData();
+                    status = REQUEST_CODE_VIDEO;
+                    showDialog("确定要将该视频文件\n\r("+uri.toString()+")\n\r进行转换？");
+                    break;
             }
 
         }
 
     }
 
+    private void showDialog(String message) {
+        if (alertDialog == null) {
+            alertDialog = DialogUtils.createAlertDialogWithText(this, this);
+        }
+        alertDialog.show();
+        alertDialog.setMessage(message);
+        if(status == REQUEST_CODE_GALLERY){
+            alertDialog.setPic(BitmapUtils.getBitmapByPicUri(this,uri));
+        }else{
+            alertDialog.setPic(VideoUtils.getBitmapByUri(this,uri));
+        }
+    }
+
     @Override
     public void onProgress(Integer progress) {
         Log.i("onProgress", "progress :" + progress);
-        Toast.makeText(this,""+progress,Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "" + progress, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onCompelete() {
         Log.i("convert_progress", "ok");
-        Toast.makeText(this,"Compeleted !!!",Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Compeleted !!!", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void OnBtnClick(int itemId) {
+        if(alertDialog !=null){
+            alertDialog.dismiss();
+        }
+        switch (status) {
+            case REQUEST_CODE_GALLERY:
+                AyscnConvertUtils.getInstance().startConvertPic(this, uri, this);
+                break;
+            case REQUEST_CODE_VIDEO:
+                String videoPath = FileUtils.getPathByUri(this, uri);
+                Log.i("main activity", "path:" + videoPath);
+                AyscnConvertUtils.getInstance().startConvertVideo(this, videoPath, this);
+                break;
+        }
     }
 }
