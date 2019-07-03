@@ -16,6 +16,8 @@ import android.widget.Toast;
 import com.liu.kinton.CharacterDance.R;
 import com.liu.kinton.CharacterDance.utils.AyscnConvertUtils;
 import com.liu.kinton.CharacterDance.utils.FileUtils;
+import com.liu.kinton.CharacterDance.widget.AlertDialog;
+import com.liu.kinton.CharacterDance.widget.ProgressDialog;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import org.jcodec.api.FrameGrab;
@@ -57,9 +59,9 @@ public class MainActivity extends AppCompatActivity implements AyscnConvertUtils
 
                     @Override
                     public void onNext(Boolean aBoolean) {
-                        if (!aBoolean) {
-                            Toast.makeText(MainActivity.this, "申请权限失败！请在设置页面开放内存读写权限，否则无法正常使用功能！", Toast.LENGTH_LONG).show();
-                        }
+//                        if (!aBoolean) {
+//                            Toast.makeText(MainActivity.this, "申请权限失败！请在设置页面开放内存读写权限，否则无法正常使用功能！", Toast.LENGTH_LONG).show();
+//                        }
                     }
 
                     @Override
@@ -73,13 +75,16 @@ public class MainActivity extends AppCompatActivity implements AyscnConvertUtils
                     }
                 });
     }
+    private ProgressDialog dialog;
 
     @OnClick({R.id.iv_main_convert_pic, R.id.iv_main_convert_video})
     void onPicClick(View view) {
         switch (view.getId()) {
             case R.id.iv_main_convert_pic:
-                Intent picIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(picIntent, REQUEST_CODE_GALLERY);
+                dialog = new ProgressDialog(this);
+                dialog.show();
+                //Intent picIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                //startActivityForResult(picIntent, REQUEST_CODE_GALLERY);
                 break;
             case R.id.iv_main_convert_video:
                 Intent vIntent = new Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
@@ -96,6 +101,8 @@ public class MainActivity extends AppCompatActivity implements AyscnConvertUtils
                     Log.i("main activity", "uri:" + data.getData().toString());
                     Uri uri = data.getData();
                     //Log.i("main activity", "path:" + FileUtils.getPathByUri(this, data.getData()));
+                    dialog = new ProgressDialog(this);
+                    dialog.show();
                     AyscnConvertUtils.getInstance().startConvertPic(this, uri, this);
                     break;
                 case REQUEST_CODE_VIDEO:
@@ -112,11 +119,17 @@ public class MainActivity extends AppCompatActivity implements AyscnConvertUtils
     public void onProgress(Integer progress) {
         Log.i("onProgress", "progress :" + progress);
         Toast.makeText(this,""+progress,Toast.LENGTH_LONG).show();
+        if(dialog != null){
+            dialog.setProgress(progress);
+        }
     }
 
     @Override
     public void onCompelete() {
         Log.i("convert_progress", "ok");
         Toast.makeText(this,"Compeleted !!!",Toast.LENGTH_LONG).show();
+        if(dialog != null){
+            dialog.dismiss();
+        }
     }
 }

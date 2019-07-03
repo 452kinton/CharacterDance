@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@drawable/dialog_bg"
+    android:layout_width="match_parent"
+    android:gravity="center"
+    android:minHeight="80dp"
+    android:padding="16dp"
+    android:layout_height="wrap_content">
+    <com.liu.kinton.CharacterDance.widget.RoundProgress
+        android:layout_width="match_parent"
+        android:background="#fff"
+        app:progress_color="@color/colorPrimaryGary"
+        app:progress_line_weight="4dp"
+        app:progress_text_size="20sp"
+        android:id="@+id/progress_view"
+        app:progress_text_color="@color/colorPrimary"
+        android:layout_height="80dp" />
+
+</LinearLayout>
