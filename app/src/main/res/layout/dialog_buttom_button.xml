@@ -3,12 +3,12 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <TextView
+        android:background="@drawable/selector_button_bg_white_with_left_corner"
         android:id="@+id/btn_cancel"
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:text="取消"
-        android:background="@drawable/selector_button_bg_white_with_left_corner"
-        android:textColor="#000"
+        android:text="取消
+        android:textColor="#555"
         android:gravity="center"
         android:textSize="20sp"
         android:layout_height="56dp" />
@@ -19,8 +19,8 @@
     <TextView
         android:id="@+id/btn_ensure"
         android:text="确定"
-        android:background="@drawable/selector_button_bg_white_with_left_corner"
-        android:textColor="#0ff"
+        android:textColor="#00ddff"
+        android:background="@drawable/selector_button_bg_white_with_right_corner"
         android:gravity="center"
         android:textSize="20sp"
         android:layout_width="0dp"

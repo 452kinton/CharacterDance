@@ -33,6 +33,17 @@ public class BitmapUtils {
         return bit;
     }
 
+    public static Bitmap getBitmapByPicUri(Context context, Uri uri) {
+        Bitmap bitmap = null;
+        try {
+            bitmap = BitmapFactory.decodeStream(context.getContentResolver().openInputStream(uri));
+            bitmap = BitmapUtils.compressBitmap(bitmap, 0.2f, 0.2f);
+        } catch (Exception ex) {
+            Log.i("utils", "" + ex.getMessage());
+        }
+        return bitmap;
+    }
+
     static public Bitmap compressBitmap(Bitmap bitmap, float sx, float sy) {
         Matrix matrix = new Matrix();
         matrix.setScale(sx, sy);
@@ -58,7 +69,7 @@ public class BitmapUtils {
                 int green = (grey & 0x0000ff00) >> 8; //取中两位
                 int blue = grey & 0x000000ff; //取低两位
 
-                grey = (int) ((float) red*0.4 + (float) green*0.3+ (float) blue*0.3);
+                grey = (int) ((float) red * 0.4 + (float) green * 0.3 + (float) blue * 0.3);
                 datas[i][j] = grey;
             }
         }
@@ -75,9 +86,9 @@ public class BitmapUtils {
         mPaint.setTextSize(6);
 
         int x = 0;
-        for (int xIndex = 10; x <width; xIndex += 6) {
+        for (int xIndex = 10; x < width; xIndex += 6) {
             int y = 0;
-            for (int yIndex = 10; y<height; yIndex += 6) {
+            for (int yIndex = 10; y < height; yIndex += 6) {
 
                 int charIndex = garyDatas[x][y] / 18;
                 String _char = arr[charIndex];
@@ -100,10 +111,10 @@ public class BitmapUtils {
         return whiteBgBitmap;
     }
 
-    static public boolean addGraphToGallery(Context context, Bitmap bmp,String dirName,boolean need2Gallery) {
+    static public boolean addGraphToGallery(Context context, Bitmap bmp, String dirName, boolean need2Gallery) {
         boolean result = false;
         try {
-            File photo = new File(Environment.getExternalStorageDirectory() + "/"+dirName, String.format("FunPic_%d.jpg",
+            File photo = new File(Environment.getExternalStorageDirectory() + "/" + dirName, String.format("FunPic_%d.jpg",
                     System.currentTimeMillis()));
 
             File dir = new File(photo.getParent());
@@ -115,7 +126,7 @@ public class BitmapUtils {
             Log.i("addGraphToGallery", "created file");
             saveBitmapToJPG(bmp, photo);
             Log.i("addGraphToGallery", "saved");
-            if(need2Gallery) {
+            if (need2Gallery) {
                 Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                 Uri contentUri = Uri.fromFile(photo);
                 mediaScanIntent.setData(contentUri);

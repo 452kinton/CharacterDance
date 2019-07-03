@@ -100,6 +100,27 @@ public class VideoUtils {
         return bitmap;
     }
 
+    public static Bitmap getBitmapByUri(Context context,Uri uri){
+        String path = FileUtils.getPathByUri(context,uri);
+        File file = new File(path);
+        MediaExtractor extractor = null;
+        MediaFormat mediaFormat = null;
+        MediaCodec decoder = null;
+        Bitmap bitmap =null;
+        try{
+            extractor = initMediaExtractor(file);
+            mediaFormat = initMediaFormat(path, extractor);
+            decoder = initMediaCodec(mediaFormat);
+            decoder.configure(mediaFormat, null, null, 0);
+            decoder.start();
+
+            bitmap= getBitmapBySec(extractor, mediaFormat, decoder, 0l);
+        }catch (IOException ex){
+
+        }
+        return  bitmap;
+    }
+
     private static byte[] YUV_420_888toNV21(Image image) {
         Rect crop = image.getCropRect();
         int format = image.getFormat();
