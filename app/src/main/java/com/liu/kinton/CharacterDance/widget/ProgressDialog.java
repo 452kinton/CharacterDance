@@ -21,7 +21,9 @@ public class ProgressDialog extends Dialog {
         super(context, R.style.dialog);
         View view = getLayoutInflater().inflate(R.layout.dialog_progress,null);
         setContentView(view);
+        unbinder = ButterKnife.bind(this);
         this.setCanceledOnTouchOutside(false);
+        this.setCancelable(false);
     }
 
     public void setProgress(int progress){
@@ -36,12 +38,12 @@ public class ProgressDialog extends Dialog {
     @Override
     protected void onStart() {
         super.onStart();
-        unbinder = ButterKnife.bind(this);
+
     }
 
     @Override
     public void dismiss() {
         super.dismiss();
-        unbinder.unbind();
+        //unbinder.unbind();
     }
 }

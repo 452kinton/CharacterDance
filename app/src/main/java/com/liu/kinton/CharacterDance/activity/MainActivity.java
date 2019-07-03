@@ -19,6 +19,7 @@ import com.liu.kinton.CharacterDance.utils.BitmapUtils;
 import com.liu.kinton.CharacterDance.utils.DialogUtils;
 import com.liu.kinton.CharacterDance.utils.FileUtils;
 
+import com.liu.kinton.CharacterDance.utils.VideoUtils;
 import com.liu.kinton.CharacterDance.widget.AlertDialog;
 import com.liu.kinton.CharacterDance.widget.ProgressDialog;
 
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements AyscnConvertUtils
     private static final int REQUEST_CODE_GALLERY = 0x10;// 图库选取图片标识请求码
     private static final int REQUEST_CODE_VIDEO = 0x20;// 图库选取图片标识请求码
     private AlertDialog alertDialog = null;
+    private ProgressDialog progressDialog = null;
     private Uri uri = null;
     private int status = 0;
 
@@ -66,9 +68,6 @@ public class MainActivity extends AppCompatActivity implements AyscnConvertUtils
 
                     @Override
                     public void onNext(Boolean aBoolean) {
-//                        if (!aBoolean) {
-//                            Toast.makeText(MainActivity.this, "申请权限失败！请在设置页面开放内存读写权限，否则无法正常使用功能！", Toast.LENGTH_LONG).show();
-//                        }
                     }
 
                     @Override
@@ -88,10 +87,8 @@ public class MainActivity extends AppCompatActivity implements AyscnConvertUtils
     void onPicClick(View view) {
         switch (view.getId()) {
             case R.id.iv_main_convert_pic:
-                dialog = new ProgressDialog(this);
-                dialog.show();
-                //Intent picIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                //startActivityForResult(picIntent, REQUEST_CODE_GALLERY);
+                Intent picIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(picIntent, REQUEST_CODE_GALLERY);
                 break;
             case R.id.iv_main_convert_video:
                 Intent vIntent = new Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
@@ -108,12 +105,12 @@ public class MainActivity extends AppCompatActivity implements AyscnConvertUtils
                     Log.i("main activity", "uri:" + data.getData().toString());
                     uri = data.getData();
                     status = REQUEST_CODE_GALLERY;
-                    showDialog("确定要将该图片\n\r("+uri.toString()+")\n\r进行转换？");
+                    showAlertDialog("确定要将该图片\n\r("+uri.toString()+")\n\r进行转换？");
                     break;
                 case REQUEST_CODE_VIDEO:
                     uri = data.getData();
                     status = REQUEST_CODE_VIDEO;
-                    showDialog("确定要将该视频文件\n\r("+uri.toString()+")\n\r进行转换？");
+                    showAlertDialog("确定要将该视频文件\n\r("+uri.toString()+")\n\r进行转换？");
                     break;
             }
 
@@ -121,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements AyscnConvertUtils
 
     }
 
-    private void showDialog(String message) {
+    private void showAlertDialog(String message) {
         if (alertDialog == null) {
             alertDialog = DialogUtils.createAlertDialogWithText(this, this);
         }
@@ -134,16 +131,28 @@ public class MainActivity extends AppCompatActivity implements AyscnConvertUtils
         }
     }
 
+    private void showProgressDialog(){
+        if (progressDialog == null) {
+            progressDialog = DialogUtils.createProgressDialogWithText(this);
+        }
+        progressDialog.show();
+        progressDialog.setProgress(0);
+    }
+
     @Override
     public void onProgress(Integer progress) {
+        progressDialog.setProgress(progress);
         Log.i("onProgress", "progress :" + progress);
-        Toast.makeText(this, "" + progress, Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "" + progress, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onCompelete() {
         Log.i("convert_progress", "ok");
-        Toast.makeText(this, "Compeleted !!!", Toast.LENGTH_LONG).show();
+        if(progressDialog !=null){
+            progressDialog.dismiss();
+        }
+        //Toast.makeText(this, "Compeleted !!!", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -151,6 +160,7 @@ public class MainActivity extends AppCompatActivity implements AyscnConvertUtils
         if(alertDialog !=null){
             alertDialog.dismiss();
         }
+        showProgressDialog();
         switch (status) {
             case REQUEST_CODE_GALLERY:
                 AyscnConvertUtils.getInstance().startConvertPic(this, uri, this);

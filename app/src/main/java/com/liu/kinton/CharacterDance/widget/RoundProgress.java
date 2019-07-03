@@ -90,7 +90,8 @@ public class RoundProgress extends View {
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setTextAlign(Paint.Align.LEFT);
         mPaint.setLinearText(true);
-        canvas.drawText(progress + "%", (getWidth()-(float)text_size) / 2,  (getHeight()+(float)text_size/2) / 2, mPaint);
+        float left_add_rate =(float) (progress+"%").length()/2;
+        canvas.drawText(progress + "%", (getWidth()-(float)text_size*left_add_rate) / 2,  (getHeight()+(float)text_size/2) / 2, mPaint);
         startPosition += 6;
 
     }
@@ -103,13 +104,13 @@ public class RoundProgress extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        Log.i("onMeasure","start");
+       // Log.i("onMeasure","start");
 
         width  = measureDimension(75,widthMeasureSpec);
         height  = measureDimension(75,heightMeasureSpec);
 
         setMeasuredDimension(width, height);
-        Log.i("onMeasure","end");
+        //Log.i("onMeasure","end");
     }
 
     public void startProgress(){
@@ -122,8 +123,8 @@ public class RoundProgress extends View {
         int specMode = MeasureSpec.getMode(measureSpec);
         int specSize = MeasureSpec.getSize(measureSpec);
 
-        Log.i("specMode",specMode+"");
-        Log.i("specSize",specSize+"");
+        //Log.i("specMode",specMode+"");
+        //Log.i("specSize",specSize+"");
 
         if(specMode == MeasureSpec.EXACTLY){
             result = specSize;
@@ -134,7 +135,7 @@ public class RoundProgress extends View {
             }
 
         }
-        Log.i("result",result+"");
+        //Log.i("result",result+"");
         return result;
     }
 

@@ -7,7 +7,7 @@
         android:id="@+id/btn_cancel"
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:text="取消
+        android:text="取消"
         android:textColor="#555"
         android:gravity="center"
         android:textSize="20sp"
