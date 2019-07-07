@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements AyscnConvertUtils
     }
     private ProgressDialog dialog;
 
-    @OnClick({R.id.iv_main_convert_pic, R.id.iv_main_convert_video})
+    @OnClick({R.id.iv_main_convert_pic, R.id.iv_main_convert_video,R.id.iv_main_folder})
     void onPicClick(View view) {
         switch (view.getId()) {
             case R.id.iv_main_convert_pic:
@@ -94,6 +94,8 @@ public class MainActivity extends AppCompatActivity implements AyscnConvertUtils
                 Intent vIntent = new Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(vIntent, REQUEST_CODE_VIDEO);
                 break;
+            case R.id.iv_main_folder:
+                    break;
         }
     }
 
