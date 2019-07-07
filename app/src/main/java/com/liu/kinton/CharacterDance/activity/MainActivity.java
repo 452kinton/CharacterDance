@@ -81,9 +81,8 @@ public class MainActivity extends AppCompatActivity implements AyscnConvertUtils
                     }
                 });
     }
-    private ProgressDialog dialog;
 
-    @OnClick({R.id.iv_main_convert_pic, R.id.iv_main_convert_video,R.id.iv_main_folder})
+    @OnClick({R.id.iv_main_convert_pic, R.id.iv_main_convert_video, R.id.iv_main_folder})
     void onPicClick(View view) {
         switch (view.getId()) {
             case R.id.iv_main_convert_pic:
@@ -95,7 +94,9 @@ public class MainActivity extends AppCompatActivity implements AyscnConvertUtils
                 startActivityForResult(vIntent, REQUEST_CODE_VIDEO);
                 break;
             case R.id.iv_main_folder:
-                    break;
+                Intent folderIntent = new Intent(this, FolderActivity.class);
+                startActivity(folderIntent);
+                break;
         }
     }
 
@@ -107,12 +108,12 @@ public class MainActivity extends AppCompatActivity implements AyscnConvertUtils
                     Log.i("main activity", "uri:" + data.getData().toString());
                     uri = data.getData();
                     status = REQUEST_CODE_GALLERY;
-                    showAlertDialog("确定要将该图片\n\r("+uri.toString()+")\n\r进行转换？");
+                    showAlertDialog("确定要将该图片\n\r(" + uri.toString() + ")\n\r进行转换？");
                     break;
                 case REQUEST_CODE_VIDEO:
                     uri = data.getData();
                     status = REQUEST_CODE_VIDEO;
-                    showAlertDialog("确定要将该视频文件\n\r("+uri.toString()+")\n\r进行转换？");
+                    showAlertDialog("确定要将该视频文件\n\r(" + uri.toString() + ")\n\r进行转换？");
                     break;
             }
 
@@ -126,14 +127,14 @@ public class MainActivity extends AppCompatActivity implements AyscnConvertUtils
         }
         alertDialog.show();
         alertDialog.setMessage(message);
-        if(status == REQUEST_CODE_GALLERY){
-            alertDialog.setPic(BitmapUtils.getBitmapByPicUri(this,uri));
-        }else{
-            alertDialog.setPic(VideoUtils.getBitmapByUri(this,uri));
+        if (status == REQUEST_CODE_GALLERY) {
+            alertDialog.setPic(BitmapUtils.getBitmapByPicUri(this, uri));
+        } else {
+            alertDialog.setPic(VideoUtils.getBitmapByUri(this, uri));
         }
     }
 
-    private void showProgressDialog(){
+    private void showProgressDialog() {
         if (progressDialog == null) {
             progressDialog = DialogUtils.createProgressDialogWithText(this);
         }
@@ -145,21 +146,19 @@ public class MainActivity extends AppCompatActivity implements AyscnConvertUtils
     public void onProgress(Integer progress) {
         progressDialog.setProgress(progress);
         Log.i("onProgress", "progress :" + progress);
-        //Toast.makeText(this, "" + progress, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onCompelete() {
         Log.i("convert_progress", "ok");
-        if(progressDialog !=null){
+        if (progressDialog != null) {
             progressDialog.dismiss();
         }
-        //Toast.makeText(this, "Compeleted !!!", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void OnBtnClick(int itemId) {
-        if(alertDialog !=null){
+        if (alertDialog != null) {
             alertDialog.dismiss();
         }
         showProgressDialog();
