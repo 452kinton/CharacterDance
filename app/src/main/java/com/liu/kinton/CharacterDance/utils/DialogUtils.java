@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.liu.kinton.CharacterDance.widget.AlertDialog;
 import com.liu.kinton.CharacterDance.widget.ProgressDialog;
+import com.liu.kinton.CharacterDance.widget.ShowPhotoDialog;
 
 public class DialogUtils {
     public interface  OnDialogBtnClickListener{
@@ -14,12 +15,20 @@ public class DialogUtils {
         AlertDialog alertDialog = new AlertDialog(context)
                 .setOnBtnClickListener(listener);
         return alertDialog;
-    };
+    }
 
     public static ProgressDialog createProgressDialogWithText(Context context){
         ProgressDialog alertDialog = new ProgressDialog(context);
                // .setOnBtnClickListener(listener);
         return alertDialog;
-    };
+    }
+
+    public static ShowPhotoDialog createShowPhotoDialog(Context context){
+        ShowPhotoDialog showPhotoDialog = new ShowPhotoDialog(context);
+        // .setOnBtnClickListener(listener);
+        return showPhotoDialog;
+    }
+
+
 
 }

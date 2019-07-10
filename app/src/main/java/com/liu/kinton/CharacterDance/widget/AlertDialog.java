@@ -39,7 +39,6 @@ public class AlertDialog extends Dialog {
     }
 
     public AlertDialog setLayout(Context context) {
-        this.context = context;
         return this;
     }
 
