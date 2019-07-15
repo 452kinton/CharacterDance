@@ -50,6 +50,7 @@ public class VideoDialog extends Dialog {
         Log.i("VideoDialog","init player");
         initSuccess = initVideo(path);
     }
+
     @OnClick(R.id.vv_show)
     void onVideoClick(){
         if(isPlaying){
@@ -58,12 +59,13 @@ public class VideoDialog extends Dialog {
             ivStatus.setVisibility(View.VISIBLE);
             isPlaying = false;
         }else {
-            if(currentPosition <0) currentPosition =0 ;
+            if(currentPosition <0) {currentPosition =0 ;
             vvShow.seekTo(currentPosition);
             vvShow.start();
             ivStatus.setVisibility(View.GONE);
             isPlaying = true;
         }
+    }
     }
 
     @Override
