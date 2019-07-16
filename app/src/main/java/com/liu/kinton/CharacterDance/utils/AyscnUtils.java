@@ -5,12 +5,9 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
 
-import com.liu.kinton.CharacterDance.ffmpegUtils.CmdList;
-import com.liu.kinton.CharacterDance.ffmpegUtils.FFmpegCmd;
-import com.liu.kinton.CharacterDance.ffmpegUtils.FFmpegUtil;
-import com.liu.kinton.CharacterDance.ffmpegUtils.OnVideoProcessListener;
-
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -20,13 +17,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class AyscnConvertUtils {
+public class AyscnUtils {
 
     private static class SingletonClassInstance {
-        private static final AyscnConvertUtils instance = new AyscnConvertUtils();
+        private static final AyscnUtils instance = new AyscnUtils();
     }
 
-    private AyscnConvertUtils() {
+    private AyscnUtils() {
     }
 
     public interface Progresslistener {
@@ -35,7 +32,7 @@ public class AyscnConvertUtils {
         void onCompelete();
     }
 
-    public static AyscnConvertUtils getInstance() {
+    public static AyscnUtils getInstance() {
         return SingletonClassInstance.instance;
     }
 
@@ -86,6 +83,46 @@ public class AyscnConvertUtils {
                     }
                 });
 
+    }
+
+    public void getBitmapByPath(final Context context,final String path,Observer<Bitmap> observer){
+        Observable.create(new ObservableOnSubscribe<Bitmap>() {
+            @Override
+            public void subscribe(ObservableEmitter<Bitmap> emitter) throws Exception {
+                Bitmap bitmap = null;
+                boolean isVideo = path.contains("mp4");
+                if(isVideo){
+                   // Log.i("getBitmapByPath subscribe","MP4");
+                    bitmap = VideoUtils.getBitmapByUri(context,Uri.fromFile(new File(path)));
+                }else{
+                   // Log.i("getBitmapByPath subscribe","jpeg");
+                    bitmap = BitmapUtils.getBitmapByPicUri(context,Uri.fromFile(new File(path)));
+                }
+                emitter.onNext(bitmap);
+            }
+        }).subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(observer);
+    }
+
+    public void getAllFileListByPath(final String path,Observer<List<String>> observer){
+        Observable.create(new ObservableOnSubscribe<List<String>>() {
+            @Override
+            public void subscribe(ObservableEmitter<List<String>> emitter) throws Exception {
+                List<String> paths = new ArrayList<String>();
+                File folder = new File(path);
+                if(folder.exists()){
+                if(folder.isDirectory()){
+                    for(File file : folder.listFiles()){
+                        paths.add(file.getAbsolutePath());
+                    }
+                }
+                }
+                emitter.onNext(paths);
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
     }
 
     public void startConvertPic(final Context context, final Uri picUri, final Progresslistener listener) {

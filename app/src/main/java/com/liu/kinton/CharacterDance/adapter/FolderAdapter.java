@@ -1,36 +1,36 @@
 package com.liu.kinton.CharacterDance.adapter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderViewHolder> {
-    public static class FolderViewHolder extends RecyclerView.ViewHolder {
-        public final TextView tvTitle = null;
-        public final ImageView ivPic = null;
+import com.liu.kinton.CharacterDance.R;
+import com.liu.kinton.CharacterDance.base.BaseAdapter;
+import com.liu.kinton.CharacterDance.base.ListItemListener;
 
-        public FolderViewHolder(View v) {
-            super(v);
-        }
-    }
 
-    @NonNull
-    @Override
-    public FolderViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return null;
+import java.util.List;
+
+public class FolderAdapter extends BaseAdapter<String,FolderHolder> {
+
+    public FolderAdapter(Context context, List<String> data, ListItemListener listener) {
+        super(context, data,listener);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FolderViewHolder folderViewHolder, int i) {
-
+    public int getLayoutByType(int itemType) {
+        return R.layout.layout_item_file;
     }
 
+    @Override
+    public FolderHolder getViewHodler(View view) {
+        FolderHolder folderHolder = new FolderHolder(view,getContext(),getListener());
+        return folderHolder;
+    }
 
     @Override
-    public int getItemCount() {
-        return 0;
+    public void onBindViewHolder(@NonNull FolderHolder folderHolder, int position) {
+        folderHolder.clearAll();
+        folderHolder.setData(getData().get(position));
     }
 }
