@@ -30,7 +30,6 @@ public class RoundProgress extends View {
     private int text_color;
     private Paint mPaint;
     private RectF oval;
-    LinearGradient linearGradient;
     private boolean isRun = false;
 
     Handler mhandler=new Handler(){
@@ -39,7 +38,7 @@ public class RoundProgress extends View {
                 case 0x001:
                     //重新绘制界面
                     invalidate();//告诉UI主线程重新绘制
-                    mhandler.sendEmptyMessageDelayed(0x001, 15);
+                    mhandler.sendEmptyMessageDelayed(0x001, 25);
                     break;
 
                 default:
@@ -48,8 +47,7 @@ public class RoundProgress extends View {
         }
     };
 
-
-        public RoundProgress(Context context) {
+    public RoundProgress(Context context) {
         super(context);
     }
 
@@ -104,13 +102,11 @@ public class RoundProgress extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-       // Log.i("onMeasure","start");
 
         width  = measureDimension(75,widthMeasureSpec);
         height  = measureDimension(75,heightMeasureSpec);
 
         setMeasuredDimension(width, height);
-        //Log.i("onMeasure","end");
     }
 
     public void startProgress(){

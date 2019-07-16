@@ -47,6 +47,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:padding="40dp"
+            android:id="@+id/iv_main_camera"
         android:layout_margin="24dp"
         android:contentDescription="@null"
         android:background="@drawable/main_function_button_bg_selector"

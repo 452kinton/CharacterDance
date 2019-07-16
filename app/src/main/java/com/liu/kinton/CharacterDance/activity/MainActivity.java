@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements AyscnUtils.Progre
                 });
     }
 
-    @OnClick({R.id.iv_main_convert_pic, R.id.iv_main_convert_video, R.id.iv_main_folder})
+    @OnClick({R.id.iv_main_convert_pic, R.id.iv_main_convert_video, R.id.iv_main_folder,R.id.iv_main_camera})
     void onPicClick(View view) {
         switch (view.getId()) {
             case R.id.iv_main_convert_pic:
@@ -100,6 +100,9 @@ public class MainActivity extends AppCompatActivity implements AyscnUtils.Progre
             case R.id.iv_main_folder:
                 Intent folderIntent = new Intent(this, FolderActivity.class);
                 startActivity(folderIntent);
+                break;
+            case R.id.iv_main_camera:
+                showProgressDialog();
                 break;
         }
     }
