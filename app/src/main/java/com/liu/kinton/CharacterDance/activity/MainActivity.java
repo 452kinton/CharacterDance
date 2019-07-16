@@ -12,10 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.liu.kinton.CharacterDance.R;
-import com.liu.kinton.CharacterDance.utils.AyscnConvertUtils;
+import com.liu.kinton.CharacterDance.utils.AyscnUtils;
 import com.liu.kinton.CharacterDance.utils.BitmapUtils;
 import com.liu.kinton.CharacterDance.utils.DialogUtils;
 import com.liu.kinton.CharacterDance.utils.FileUtils;
@@ -41,7 +40,7 @@ import butterknife.OnClick;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
-public class MainActivity extends AppCompatActivity implements AyscnConvertUtils.Progresslistener, DialogUtils.OnDialogBtnClickListener {
+public class MainActivity extends AppCompatActivity implements AyscnUtils.Progresslistener, DialogUtils.OnDialogBtnClickListener {
     private static final int REQUEST_CODE_GALLERY = 0x10;// 图库选取图片标识请求码
     private static final int REQUEST_CODE_VIDEO = 0x20;// 图库选取图片标识请求码
     private AlertDialog alertDialog = null;
@@ -91,23 +90,12 @@ public class MainActivity extends AppCompatActivity implements AyscnConvertUtils
     void onPicClick(View view) {
         switch (view.getId()) {
             case R.id.iv_main_convert_pic:
-                File folder  = new File(Environment.getExternalStorageDirectory() + "/FunVideo_video/");
-
-                videoDialog = DialogUtils.createVideoDialog(this,folder.listFiles()[1].getAbsolutePath());
-                videoDialog.show();
-                videoDialog.startVideo();
-
-                //Intent picIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                //startActivityForResult(picIntent, REQUEST_CODE_GALLERY);
+                Intent picIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(picIntent, REQUEST_CODE_GALLERY);
                 break;
             case R.id.iv_main_convert_video:
-                File _folder  = new File(Environment.getExternalStorageDirectory() + "/FunVideo_Pics/");
-
-                showPhotoDialog = DialogUtils.createShowPhotoDialog(this);
-                showPhotoDialog.show();
-                showPhotoDialog.setPiscByBitmap(BitmapUtils.getBitmapByUri(this,Uri.fromFile(_folder.listFiles()[0])));
-                //Intent vIntent = new Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
-                //startActivityForResult(vIntent, REQUEST_CODE_VIDEO);
+                Intent vIntent = new Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(vIntent, REQUEST_CODE_VIDEO);
                 break;
             case R.id.iv_main_folder:
                 Intent folderIntent = new Intent(this, FolderActivity.class);
@@ -180,12 +168,12 @@ public class MainActivity extends AppCompatActivity implements AyscnConvertUtils
         showProgressDialog();
         switch (status) {
             case REQUEST_CODE_GALLERY:
-                AyscnConvertUtils.getInstance().startConvertPic(this, uri, this);
+                AyscnUtils.getInstance().startConvertPic(this, uri, this);
                 break;
             case REQUEST_CODE_VIDEO:
                 String videoPath = FileUtils.getPathByUri(this, uri);
                 Log.i("main activity", "path:" + videoPath);
-                AyscnConvertUtils.getInstance().startConvertVideo(this, videoPath, this);
+                AyscnUtils.getInstance().startConvertVideo(this, videoPath, this);
                 break;
         }
     }

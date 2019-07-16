@@ -33,6 +33,12 @@ public class ShowPhotoDialog extends Dialog {
         ivShow.setImageBitmap(bitmap);
     }
 
+    @Override
+    public void dismiss() {
+        super.dismiss();
+        unbinder.unbind();
+    }
+
     @OnClick(R.id.iv_back)
     void onBackClick(View view){
         this.dismiss();

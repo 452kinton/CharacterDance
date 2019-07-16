@@ -1,5 +1,6 @@
 package com.liu.kinton.CharacterDance.activity;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
@@ -17,7 +18,12 @@ import com.liu.kinton.CharacterDance.R;
 import com.liu.kinton.CharacterDance.adapter.FolderAdapter;
 import com.liu.kinton.CharacterDance.base.ListItemListener;
 import com.liu.kinton.CharacterDance.utils.AyscnUtils;
+import com.liu.kinton.CharacterDance.utils.BitmapUtils;
+import com.liu.kinton.CharacterDance.utils.DialogUtils;
+import com.liu.kinton.CharacterDance.widget.ShowPhotoDialog;
+import com.liu.kinton.CharacterDance.widget.VideoDialog;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -101,8 +107,22 @@ public class FolderActivity extends AppCompatActivity implements ListItemListene
         filelist.setItemAnimator( new DefaultItemAnimator());
     }
 
+    private ShowPhotoDialog showPhotoDialog;
+    private VideoDialog videoDialog;
+
     @Override
     public void onItemClick(int position) {
-        Toast.makeText(this,mAdapter.getData().get(position),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this,mAdapter.getData().get(position),Toast.LENGTH_SHORT).show();
+        String path = mAdapter.getData().get(position);
+        if(!mAdapter.getData().get(position).contains("mp4")){
+            showPhotoDialog = DialogUtils.createShowPhotoDialog(this);
+            showPhotoDialog.show();
+            File file = new File(path);
+            showPhotoDialog.setPiscByBitmap(BitmapUtils.getBitmapByUri(this,Uri.fromFile(file)));
+        }else{
+            videoDialog = DialogUtils.createVideoDialog(this,path);
+            videoDialog.show();
+            videoDialog.startVideo();
+        }
     }
 }
