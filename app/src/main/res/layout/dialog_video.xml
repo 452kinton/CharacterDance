@@ -17,7 +17,7 @@
         android:padding="4dp"
         android:layout_gravity="right|top"/>
     <ImageView
-        android:id="@+id/z"
+        android:id="@+id/iv_video_status"
         android:layout_width="72dp"
         android:layout_height="72dp"
         android:visibility="gone"
